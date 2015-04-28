@@ -5,7 +5,7 @@ class Piece
   attr_reader :color, :pos
 
   DIAG_STEPS = [[-1,1], [1,1], [-1,-1], [1,-1]]
-  UP_DOWN_STEPS = [[0,1], [0,-1], [1,0], [-1,0]]
+  UPDOWN_STEPS = [[0,1], [0,-1], [1,0], [-1,0]]
   KNIGHT_STEPS = [[-2, -1],
                   [-2,  1],
                   [-1, -2],
@@ -26,6 +26,14 @@ class Piece
     raise "Not yet implemented"
   end
 
+  def occupied?(pos)
+    !@board[pos].nil?
+  end
+
+  def on_board?(pos)
+    pos.none? {|coord| coord < 0 || coord > 7 }
+  end
+
 end
 
 class SlidingPiece < Piece  # bishops, queens, rook
@@ -39,7 +47,7 @@ class SlidingPiece < Piece  # bishops, queens, rook
   end
 
   def updown_moves(pos)
-    moves(pos, UP_DOWN_STEPS)
+    moves(pos, UPDOWN_STEPS)
   end
 
   def moves(pos, direction)
@@ -48,22 +56,17 @@ class SlidingPiece < Piece  # bishops, queens, rook
     direction.each do |step|
       next_step = [pos[0] + step[0], pos[1] + step[1]]
 
-      until on_board?(next_step) == false #|| occupied?(next_step) by same color
-
+      until !on_board?(next_step)
+        if occupied?(next_step)
+          @board[next_step].color != @color ? moves << next_step : break
+          break
+        end
         moves << next_step
         next_step = [next_step[0] + step[0], next_step[1] + step[1]]
       end
     end
 
     moves
-  end
-
-  def occupied?(pos)
-    #check pos on board, return true if nil
-  end
-
-  def on_board?(pos)
-    pos.none? {|c| c < 0 || c > 7 }
   end
 
 end
@@ -78,7 +81,7 @@ class SteppingPiece < Piece  # knights and kings?
     moves = []
     steps.each do |step|
       next_step = [pos[0] + step[0], pos[1] + step[1]]
-      moves << next_step if on_board?(next_step) || !occupied?(next_step)
+      moves << next_step if on_board?(next_step) && !occupied?(next_step)
     end
 
     moves

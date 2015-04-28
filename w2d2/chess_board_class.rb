@@ -3,6 +3,7 @@ require_relative 'indiv_pieces.rb'
 require 'byebug'
 
 class ChessBoard
+  attr_reader :grid
 
   def initialize
     @grid = Array.new(8) { Array.new(8) }
@@ -28,19 +29,19 @@ class ChessBoard
     #set black back row
 
     @grid[0].each_index do |idx|
-      self[[0, idx]] = back_row[idx].new(@grid, :black, [0, idx])
+      self[[0, idx]] = back_row[idx].new(self, :black, [0, idx])
     end
 
     @grid[7].each_index do |idx|
-      self[[7, idx]] = back_row[idx].new(@grid, :white, [7, idx])
+      self[[7, idx]] = back_row[idx].new(self, :white, [7, idx])
     end
 
     @grid[1].each_index do |idx|
-      self[[1, idx]] = Pawn.new(@grid, :black, [1, idx])
+      self[[1, idx]] = Pawn.new(self, :black, [1, idx])
     end
 
     @grid[6].each_index do |idx|
-      self[[6, idx]] = Pawn.new(@grid, :white, [6, idx])
+      self[[6, idx]] = Pawn.new(self, :white, [6, idx])
     end
   end
 
@@ -102,6 +103,7 @@ class ChessBoard
 
     check_all_tiles do |tile|
       if !tile.nil?
+        # debugger
         if tile.initial_moves.any? { |move| move == king_pos }
           return true
         end
@@ -119,3 +121,4 @@ end
 grid = ChessBoard.new
 grid.set_board
 grid.display
+puts grid.check?(:black)
