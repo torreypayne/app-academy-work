@@ -1,58 +1,65 @@
 class Bishop < SlidingPiece
-  include Moveable
 
-  def initialize
+  def initialize(board, color, pos)
+    super
   end
 
-
-  def moves
+  def initial_moves
+    diagonal_moves(@pos)
   end
 end
 
 class Rook < SlidingPiece
-  include Moveable
 
-  def initialize
+  def initialize(board, color, pos)
+    super
   end
 
-  def moves
+  def initial_moves
+    updown_moves(@pos)
   end
+
 end
 
 class Queen < SlidingPiece
-  include Moveable
 
-  def initialize
+  def initialize(board, color, pos)
+    super
   end
 
-  def moves
+  def initial_moves
+    updown_moves(@pos) + diagonal_moves(@pos)
   end
 end
 
 class King < SteppingPiece
-  include Moveable
 
-  def initialize
+  def initialize(board, color, pos)
+    super
   end
 
-  def moves
+  def initial_moves
+    step_moves(UPDOWN_STEPS)
   end
 end
 
 class Knight < SteppingPiece
 
-  def initialize
+  def initialize(board, color, pos)
+    super
   end
 
-  def moves
+  def initial_moves
+    step_moves(KNIGHT_STEPS)
   end
 end
 
 class Pawn < Piece
 
-  def initialize
+  def initialize(board, color, pos)
+    super
   end
 
-  def moves
+  def initial_moves
   end
 end
