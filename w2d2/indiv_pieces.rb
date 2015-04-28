@@ -1,5 +1,5 @@
 class Bishop < SlidingPiece
-  include DiagonalMoveable
+  include Moveable
 
   def initialize
   end
@@ -10,7 +10,7 @@ class Bishop < SlidingPiece
 end
 
 class Rook < SlidingPiece
-  include UpDownMoveable
+  include Moveable
 
   def initialize
   end
@@ -20,8 +20,7 @@ class Rook < SlidingPiece
 end
 
 class Queen < SlidingPiece
-  include DiagonalMoveable
-  include UpDownMoveable
+  include Moveable
 
   def initialize
   end
@@ -31,8 +30,7 @@ class Queen < SlidingPiece
 end
 
 class King < SteppingPiece
-  include UpdownMoveable
-  include DiagonalMoveable
+  include Moveable
 
   def initialize
   end
