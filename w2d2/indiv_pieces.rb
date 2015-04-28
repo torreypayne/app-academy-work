@@ -54,12 +54,13 @@ class Knight < SteppingPiece
   end
 end
 
-class Pawn < Piece
+class Pawn < SteppingPiece
 
   def initialize(board, color, pos)
     super
   end
 
   def initial_moves
+    step_moves(UPDOWN_STEPS)
   end
 end
