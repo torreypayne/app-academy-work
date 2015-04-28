@@ -1,4 +1,8 @@
+require 'byebug'
+require_relative 'moveable.rb'
+
 class Piece
+  include Moveable
 
   def initialize(board, color, pos)
     @board = board
@@ -29,27 +33,25 @@ class SteppingPiece < Piece  # knights, kings, pawns?
 
 end
 
-module DiagonalMoveable
 
-  DIAG_STEPS = [ [-1,1], [1,1], [-1,-1], [1,-1]]
+class Arr
+  include Moveable
 
-  def diagonal_moves(pos)
-    
+  attr_accessor :arr
 
-    # Finish
+  def initialize(arr)
+    @arr = arr
   end
 
-  def on_board?(pos)
-    pos.none? {|c| c < 0 && c > 7 }
+  def diagonal
+    diagonal_moves(@arr)
+  end
+
+  def updown
+    updown_moves(@arr)
   end
 end
 
-module UpDownMoveable # rename
-
-  DELTAS = [ [0,1], [0,-1], [1,0], [-1,0]]
-
-  def updown_moves(pos)
-    #Finish
-  end
-
-end
+a = Arr.new([3,3])
+p a.updown
+p a.diagonal
