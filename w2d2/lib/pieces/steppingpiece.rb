@@ -1,5 +1,4 @@
 class SteppingPiece < Piece
-
   def step_moves(steps)
     moves = []
     steps.each do |step|
@@ -9,5 +8,4 @@ class SteppingPiece < Piece
 
     moves
   end
-
 end

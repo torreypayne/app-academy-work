@@ -1,10 +1,7 @@
 class King < SteppingPiece
-  attr_reader :display
-
-  def initialize(board, color, pos, moved=false)
-    super
-    @display = "\u2654 " if @color == :white
-    @display = "\u265A " if @color == :black
+  def display
+    return "\u2654 " if @color == :white
+    return "\u265A " if @color == :black
   end
 
   def initial_moves

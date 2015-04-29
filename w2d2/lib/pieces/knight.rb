@@ -1,10 +1,18 @@
 class Knight < SteppingPiece
-  attr_reader :display
+  KNIGHT_STEPS = [
+    [-2, -1],
+    [-2,  1],
+    [-1, -2],
+    [-1,  2],
+    [ 1, -2],
+    [ 1,  2],
+    [ 2, -1],
+    [ 2,  1]
+  ]
 
-  def initialize(board, color, pos, moved=false)
-    super
-    @display = "\u2658 " if @color == :white
-    @display = "\u265E " if @color == :black
+  def display
+    return "\u2658 " if @color == :white
+    return "\u265E " if @color == :black
   end
 
   def initial_moves

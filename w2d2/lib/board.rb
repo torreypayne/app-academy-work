@@ -164,7 +164,6 @@ class ChessBoard
   def other_color(color)
     color == :black ? :white : :black
   end
-
 end
 
 # f2, f3

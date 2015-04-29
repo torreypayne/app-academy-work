@@ -1,5 +1,4 @@
 class SlidingPiece < Piece
-
   def diagonal_moves(pos)
     sliding_moves(pos, DIAG_STEPS)
   end
@@ -26,5 +25,4 @@ class SlidingPiece < Piece
 
     moves
   end
-
 end

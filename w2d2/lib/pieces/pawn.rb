@@ -1,10 +1,10 @@
 class Pawn < Piece
-  attr_reader :display
+  PAWN_STEPS_BLACK = [[1, 0], [2, 0]]
+  PAWN_STEPS_WHITE = [[-1, 0], [-2, 0]]
 
-  def initialize(board, color, pos, moved=false)
-    super
-    @display = "\u2659 " if @color == :white
-    @display = "\u265F " if @color == :black
+  def display
+    return "\u2659 " if @color == :white
+    return "\u265F " if @color == :black
   end
 
   def initial_moves
@@ -26,5 +26,4 @@ class Pawn < Piece
 
     moves
   end
-
 end
