@@ -1,5 +1,4 @@
-require_relative 'piece_class.rb'
-require_relative 'indiv_pieces.rb'
+require_relative 'pieces/pieces'
 require 'byebug'
 
 class ChessBoard
