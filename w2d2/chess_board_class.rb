@@ -9,9 +9,6 @@ class ChessBoard
     @grid = Array.new(8) { Array.new(8) }
   end
 
-  def deep_dup # "#deep_dup" ??
-  end
-
   def [](pos)
     row, col = pos[0], pos[1]
     @grid[row][col]
@@ -68,7 +65,7 @@ class ChessBoard
     end
   end
 
-  def check_all_tiles(&prc)
+  def each_tile(&prc)
     @grid.each do |row|
       row.each do |tile|
         prc.call(tile)
@@ -76,7 +73,33 @@ class ChessBoard
     end
   end
 
+  def deep_dup # "#deep_dup" ??'
+    new_board = ChessBoard.new
+    #make empty board
+    new_board.each_tile do |piece|
+      dup_piece(piece, new_board) if piece
+    end
+    #check all tiles
+    #dup all pieces, passing in new board
+    new_board
+  end
+
+  def dup_piece(piece, new_board)
+    piece.class.new(new_board, piece.color, piece.pos.dup)
+  end
+
   def move(start_pos, end_pos)
+    piece = self[start_pos]
+    # debugger
+    raise "No piece here!" if piece.nil?
+    if piece.valid_moves.include?(end_pos)
+      piece.pos = end_pos
+      piece.moved = true
+      self[end_pos] = piece
+      self[start_pos] = nil
+    else
+      raise "Not a valid move"
+    end
   end
 
   def on_board?(pos)
@@ -91,17 +114,17 @@ class ChessBoard
     # :knight ??
   end
 
-  def check?(color)
+  def in_check?(color)
     king_pos = nil
 
-    check_all_tiles do |tile|
+    each_tile do |tile|
       if tile.is_a?(King) && tile.color == color
         king_pos = tile.pos
         break
       end
     end
 
-    check_all_tiles do |tile|
+    each_tile do |tile|
       if !tile.nil?
         # debugger
         if tile.initial_moves.any? { |move| move == king_pos }
@@ -121,4 +144,6 @@ end
 grid = ChessBoard.new
 grid.set_board
 grid.display
-puts grid.check?(:black)
+# puts grid.in_check?(:black)
+grid.move([1, 0], [2, 0])
+grid.display

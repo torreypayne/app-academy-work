@@ -2,7 +2,8 @@ require 'byebug'
 require_relative 'moveable.rb'
 
 class Piece
-  attr_reader :color, :pos
+  attr_reader :color
+  attr_accessor :pos, :moved
 
   DIAG_STEPS = [[-1,1], [1,1], [-1,-1], [1,-1]]
   UPDOWN_STEPS = [[0,1], [0,-1], [1,0], [-1,0]]
@@ -24,6 +25,18 @@ class Piece
 
   def moves
     raise "Not yet implemented"
+  end
+
+  def valid_moves
+    initial_moves.reject { |pos| move_into_check?(pos) }
+  end
+
+  def move_into_check?(pos)
+    board_dup = @board.deep_dup
+    board_dup[pos] = self
+    board_dup[@pos] = nil
+    # board_dup.fake_move(@pos, pos)
+    board_dup.in_check?(@color)
   end
 
   def occupied?(pos)
