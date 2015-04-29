@@ -1,10 +1,7 @@
 class Queen < SlidingPiece
-  attr_reader :display
-
-  def initialize(board, color, pos, moved=false)
-    super
-    @display = "\u2655 " if @color == :white
-    @display = "\u265B " if @color == :black
+  def display
+    return "\u2655 " if @color == :white
+    return "\u265B " if @color == :black
   end
 
   def initial_moves
