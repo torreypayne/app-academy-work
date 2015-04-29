@@ -2,6 +2,8 @@ require_relative './pieces'
 require 'byebug'
 require 'colorize'
 
+class InvalidMoveError < StandardError; end
+
 class ChessBoard
   attr_reader :grid
 
@@ -15,15 +17,12 @@ class ChessBoard
   end
 
   def []=(pos, piece)
-    # raise "Already occupied!" unless empty?(pos)
-
     row, col = pos[0], pos[1]
     @grid[row][col] = piece
   end
 
   def set_board
     back_row = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
-    #set black back row
 
     @grid[0].each_index do |idx|
       self[[0, idx]] = back_row[idx].new(self, :black, [0, idx])
@@ -79,7 +78,6 @@ class ChessBoard
     self.each_tile do |piece|
       new_board[piece.pos] = dup_piece(piece, new_board) if piece
     end
-    # p new_board
     new_board
   end
 
@@ -89,29 +87,25 @@ class ChessBoard
 
   def move(start_pos, end_pos)
     piece = self[start_pos]
-    # print "turn: "
-    # p piece.color
-    raise "No piece here!" if piece.nil?
+    raise InvalidMoveError.new("No piece here!") if piece.nil?
     if piece.valid_moves.include?(end_pos)
       piece.pos = end_pos
       piece.moved = true
       self[end_pos] = piece
       self[start_pos] = nil
     else
-      raise "Not a valid move"
+      raise InvalidMoveError.new("Not a valid move")
     end
   end
 
   def move!(start_pos, end_pos)
-    # p self
     tile = self[start_pos]
-    # p tile
     tile.pos = end_pos
     self[start_pos], self[end_pos] = nil, tile
   end
 
   def on_board?(pos)
-    pos.none? {|coord| coord < 0 || coord > 7 }
+    pos.none? { |coord| coord < 0 || coord > 7 }
   end
 
   def occupied?(pos)
@@ -119,44 +113,26 @@ class ChessBoard
   end
 
   def in_check?(color)
-    # king_pos = nil
-
     king_pos = king(color)
 
     pieces(other_color(color)).each do |piece|
       return true if piece.initial_moves.any? { |move| move == king_pos }
     end
 
-    # each_tile do |tile|
-    #   if tile.is_a?(King) && tile.color == color
-    #     king_pos = tile.pos
-    #     break
-    #   end
-    # end
-
-    # each_tile do |tile|
-    #   if !tile.nil? && tile.color != color
-    #     if tile.valid_moves.any? { |move| move == king_pos }
-    #       return true
-    #     end
-    #   end
-    # end
-
     false
   end
 
+  # def checkmate?(color)
+  #   return false unless in_check?(color)
+  #   pieces(color).each do |piece|
+  #     return false unless piece.valid_moves.empty?
+  #   end
+  #   true
+  # end
+
   def checkmate?(color)
-    # p in_check?(color)
     if in_check?(color)
-      # my_pieces = []
-      # self.each_tile do |tile|
-      #   next if tile.nil?
-      #   my_pieces << tile if tile.color == color
-      # end
       pieces(color).each do |piece|
-        # p piece.class
-        # p piece.pos
-        # p piece.valid_moves
         return false unless piece.valid_moves.empty?
       end
 
@@ -170,6 +146,10 @@ class ChessBoard
     king_tile = pieces(color).find { |piece| piece.is_a?(King) }
     king_tile.pos
   end
+
+  # def pieces(color)
+  #   each_tile.flatten.compact.select { |t| t.color == color }
+  # end
 
   def pieces(color)
     my_pieces = []
@@ -192,15 +172,15 @@ end
 # g2, g4
 # d8, h4
 
-grid = ChessBoard.new
-grid.set_board
-grid.display
-grid.move( [1,5], [2,5])
-grid.display
-grid.move( [6,4], [4,4])
-grid.display
-grid.move( [1,6], [3,6])
-grid.display
-grid.move( [7,3], [3,7])
-grid.display
-p grid.checkmate?(:white)
+# grid = ChessBoard.new
+# grid.set_board
+# grid.display
+# grid.move( [1,5], [2,5])
+# grid.display
+# grid.move( [6,4], [4,4])
+# grid.display
+# grid.move( [1,6], [3,6])
+# grid.display
+# grid.move( [7,3], [3,7])
+# grid.display
+# p grid.checkmate?(:white)

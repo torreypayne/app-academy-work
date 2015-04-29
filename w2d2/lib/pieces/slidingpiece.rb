@@ -1,8 +1,4 @@
-class SlidingPiece < Piece  # bishops, queens, rook
-
-  def initialize(board, color, pos, moved=false)
-    super
-  end
+class SlidingPiece < Piece
 
   def diagonal_moves(pos)
     sliding_moves(pos, DIAG_STEPS)
