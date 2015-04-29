@@ -1,6 +1,6 @@
 class SlidingPiece < Piece  # bishops, queens, rook
 
-  def initialize(board, color, pos)
+  def initialize(board, color, pos, moved=false)
     super
   end
 

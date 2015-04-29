@@ -1,6 +1,6 @@
 class SteppingPiece < Piece  # knights and kings?
 
-  def initialize(board, color, pos)
+  def initialize(board, color, pos, moved=false)
     super
   end
 

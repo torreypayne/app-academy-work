@@ -1,5 +1,6 @@
 require_relative './pieces'
 require 'byebug'
+require 'colorize'
 
 class ChessBoard
   attr_reader :grid
@@ -46,21 +47,19 @@ class ChessBoard
     puts "    ---------------"
     @grid.each_with_index do |row, row_idx|
       print (row_idx + 1).to_s + " | "
-      row.each do |piece|
-        if piece.is_a?(Pawn)
-          print piece.color == :white ? "\u2659 " : "\u265F "
-        elsif piece.is_a?(Rook)
-          print piece.color == :white ? "\u2656 " : "\u265C "
-        elsif piece.is_a?(King)
-          print piece.color == :white ? "\u2654 " : "\u265A "
-        elsif piece.is_a?(Queen)
-          print piece.color == :white ? "\u2655 " : "\u265B "
-        elsif piece.is_a?(Bishop)
-          print piece.color == :white ? "\u2657 " : "\u265D "
-        elsif piece.is_a?(Knight)
-          print piece.color == :white ? "\u2658 " : "\u265E "
+      row.each_with_index do |piece, col_idx|
+        if piece.nil?
+          if (row_idx + col_idx).even?
+            print "  ".colorize(background: :red) #dark square (black)
+          else
+            print "  ".colorize(background: :cyan) #light square (white)
+          end
         else
-          print '_ '
+          if (row_idx + col_idx).even?
+            print piece.display.colorize(background: :red, color: piece.color)
+          else
+            print piece.display.colorize(background: :cyan, color: piece.color)
+          end
         end
       end
       print "\n"
@@ -75,14 +74,12 @@ class ChessBoard
     end
   end
 
-  def deep_dup # "#deep_dup" ??'
+  def deep_dup
     new_board = ChessBoard.new
-    #make empty board
-    new_board.each_tile do |piece|
-      dup_piece(piece, new_board) if piece
+    self.each_tile do |piece|
+      new_board[piece.pos] = dup_piece(piece, new_board) if piece
     end
-    #check all tiles
-    #dup all pieces, passing in new board
+    # p new_board
     new_board
   end
 
@@ -94,9 +91,7 @@ class ChessBoard
     piece = self[start_pos]
     # print "turn: "
     # p piece.color
-    # debugger
     raise "No piece here!" if piece.nil?
-    # raise "Not your piece! "
     if piece.valid_moves.include?(end_pos)
       piece.pos = end_pos
       piece.moved = true
@@ -107,6 +102,14 @@ class ChessBoard
     end
   end
 
+  def move!(start_pos, end_pos)
+    # p self
+    tile = self[start_pos]
+    # p tile
+    tile.pos = end_pos
+    self[start_pos], self[end_pos] = nil, tile
+  end
+
   def on_board?(pos)
     pos.none? {|coord| coord < 0 || coord > 7 }
   end
@@ -115,45 +118,71 @@ class ChessBoard
     !self[pos].nil?
   end
 
-  def piece_at(pos)
-    # :knight ??
-  end
-
   def in_check?(color)
-    king_pos = nil
+    # king_pos = nil
 
-    each_tile do |tile|
-      if tile.is_a?(King) && tile.color == color
-        king_pos = tile.pos
-        break
-      end
+    king_pos = king(color)
+
+    pieces(other_color(color)).each do |piece|
+      return true if piece.initial_moves.any? { |move| move == king_pos }
     end
 
-    each_tile do |tile|
-      if !tile.nil?
-        # debugger
-        if tile.initial_moves.any? { |move| move == king_pos }
-          return true
-        end
-      end
-    end
+    # each_tile do |tile|
+    #   if tile.is_a?(King) && tile.color == color
+    #     king_pos = tile.pos
+    #     break
+    #   end
+    # end
 
-    return false
+    # each_tile do |tile|
+    #   if !tile.nil? && tile.color != color
+    #     if tile.valid_moves.any? { |move| move == king_pos }
+    #       return true
+    #     end
+    #   end
+    # end
+
+    false
   end
 
   def checkmate?(color)
+    # p in_check?(color)
     if in_check?(color)
-      my_pieces = []
-      self.each_tile do |tile|
-        next if tile.nil?
-        my_pieces << tile if tile.color == color
-      end
-      my_pieces.each do |piece|
+      # my_pieces = []
+      # self.each_tile do |tile|
+      #   next if tile.nil?
+      #   my_pieces << tile if tile.color == color
+      # end
+      pieces(color).each do |piece|
+        # p piece.class
+        # p piece.pos
+        # p piece.valid_moves
         return false unless piece.valid_moves.empty?
       end
+
+      true
+    else
+      false
+    end
+  end
+
+  def king(color)
+    king_tile = pieces(color).find { |piece| piece.is_a?(King) }
+    king_tile.pos
+  end
+
+  def pieces(color)
+    my_pieces = []
+
+    each_tile do |tile|
+      my_pieces << tile if !tile.nil? && tile.color == color
     end
 
-    true
+    my_pieces
+  end
+
+  def other_color(color)
+    color == :black ? :white : :black
   end
 
 end
