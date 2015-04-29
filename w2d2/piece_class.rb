@@ -1,5 +1,6 @@
 require 'byebug'
-require_relative 'moveable.rb'
+# require_relative 'chess_board_class.rb'
+# require_relative 'indiv_pieces.rb'
 
 class Piece
   attr_reader :color
@@ -15,6 +16,8 @@ class Piece
                   [ 1,  2],
                   [ 2, -1],
                   [ 2,  1]]
+  PAWN_STEPS_BLACK = [[0, 1], [0, 2]]
+  PAWN_STEPS_WHITE = [[0, -1], [0, -2]]
 
   def initialize(board, color, pos)
     @board = board
@@ -28,6 +31,7 @@ class Piece
   end
 
   def valid_moves
+    # debugger
     initial_moves.reject { |pos| move_into_check?(pos) }
   end
 
@@ -93,6 +97,7 @@ class SteppingPiece < Piece  # knights and kings?
   def step_moves(steps)
     moves = []
     steps.each do |step|
+      p step
       next_step = [pos[0] + step[0], pos[1] + step[1]]
       moves << next_step if on_board?(next_step) && !occupied?(next_step)
     end
