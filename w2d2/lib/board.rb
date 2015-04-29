@@ -48,17 +48,17 @@ class ChessBoard
       print (row_idx + 1).to_s + " | "
       row.each do |piece|
         if piece.is_a?(Pawn)
-          print 'P '
+          print piece.color == :white ? "\u2659 " : "\u265F "
         elsif piece.is_a?(Rook)
-          print 'R '
+          print piece.color == :white ? "\u2656 " : "\u265C "
         elsif piece.is_a?(King)
-          print 'K '
+          print piece.color == :white ? "\u2654 " : "\u265A "
         elsif piece.is_a?(Queen)
-          print 'Q '
+          print piece.color == :white ? "\u2655 " : "\u265B "
         elsif piece.is_a?(Bishop)
-          print 'B '
+          print piece.color == :white ? "\u2657 " : "\u265D "
         elsif piece.is_a?(Knight)
-          print 'N '
+          print piece.color == :white ? "\u2658 " : "\u265E "
         else
           print '_ '
         end
@@ -92,6 +92,7 @@ class ChessBoard
 
   def move(start_pos, end_pos)
     piece = self[start_pos]
+    # print "turn: "
     # p piece.color
     # debugger
     raise "No piece here!" if piece.nil?
@@ -148,11 +149,11 @@ class ChessBoard
         my_pieces << tile if tile.color == color
       end
       my_pieces.each do |piece|
-        return true unless piece.valid_moves.empty?
+        return false unless piece.valid_moves.empty?
       end
     end
 
-    false
+    true
   end
 
 end
@@ -162,16 +163,15 @@ end
 # g2, g4
 # d8, h4
 
-# grid = ChessBoard.new
-# grid.set_board
-# grid.display
-# # puts grid.in_check?(:black)
-# grid.move( [1,5], [2,5])
-# grid.display
-# grid.move( [6,4], [4,4])
-# grid.display
-# grid.move( [1,6], [3,6])
-# grid.display
-# grid.move( [7,3], [3,7])
-# grid.display
-# p grid.checkmate?(:black)
+grid = ChessBoard.new
+grid.set_board
+grid.display
+grid.move( [1,5], [2,5])
+grid.display
+grid.move( [6,4], [4,4])
+grid.display
+grid.move( [1,6], [3,6])
+grid.display
+grid.move( [7,3], [3,7])
+grid.display
+p grid.checkmate?(:white)
