@@ -1,4 +1,4 @@
-require_relative 'pieces/pieces'
+require_relative './pieces'
 require 'byebug'
 
 class ChessBoard
@@ -84,7 +84,7 @@ class ChessBoard
   end
 
   def dup_piece(piece, new_board)
-    piece.class.new(new_board, piece.color, piece.pos.dup)
+    piece.class.new(new_board, piece.color, piece.pos.dup, piece.moved)
   end
 
   def move(start_pos, end_pos)

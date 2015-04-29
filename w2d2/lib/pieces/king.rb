@@ -1,6 +1,3 @@
-require_relative 'pieces'
-require_relative 'steppingpiece'
-
 class King < SteppingPiece
 
   def initialize(board, color, pos)

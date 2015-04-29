@@ -1,5 +1,3 @@
-require_relative 'pieces'
-
 class SlidingPiece < Piece  # bishops, queens, rook
 
   def initialize(board, color, pos)
@@ -7,14 +5,14 @@ class SlidingPiece < Piece  # bishops, queens, rook
   end
 
   def diagonal_moves(pos)
-    moves(pos, DIAG_STEPS)
+    sliding_moves(pos, DIAG_STEPS)
   end
 
   def updown_moves(pos)
-    moves(pos, UPDOWN_STEPS)
+    sliding_moves(pos, UPDOWN_STEPS)
   end
 
-  def moves(pos, direction)
+  def sliding_moves(pos, direction)
     moves = []
 
     direction.each do |step|

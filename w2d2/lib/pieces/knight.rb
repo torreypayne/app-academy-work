@@ -1,6 +1,3 @@
-require_relative 'pieces'
-require_relative 'steppingpiece'
-
 class Knight < SteppingPiece
 
   def initialize(board, color, pos)
