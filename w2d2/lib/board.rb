@@ -42,7 +42,10 @@ class ChessBoard
   end
 
   def display
-    @grid.each do |row|
+    puts "    a b c d e f g h"
+    puts "    ---------------"
+    @grid.each_with_index do |row, row_idx|
+      print (row_idx + 1).to_s + " | "
       row.each do |piece|
         if piece.is_a?(Pawn)
           print 'P '
@@ -89,8 +92,10 @@ class ChessBoard
 
   def move(start_pos, end_pos)
     piece = self[start_pos]
+    # p piece.color
     # debugger
     raise "No piece here!" if piece.nil?
+    # raise "Not your piece! "
     if piece.valid_moves.include?(end_pos)
       piece.pos = end_pos
       piece.moved = true
@@ -139,14 +144,15 @@ class ChessBoard
     if in_check?(color)
       my_pieces = []
       self.each_tile do |tile|
+        next if tile.nil?
         my_pieces << tile if tile.color == color
       end
       my_pieces.each do |piece|
-        return false unless piece.valid_moves.empty?
+        return true unless piece.valid_moves.empty?
       end
     end
 
-    true
+    false
   end
 
 end
@@ -156,17 +162,16 @@ end
 # g2, g4
 # d8, h4
 
-grid = ChessBoard.new
-grid.set_board
-grid.display
-# puts grid.in_check?(:black)
-grid.move( [1,5], [2,5])
-grid.display
-grid.move( [6,4], [4,4])
-grid.display
-grid.move( [1,6], [3,6])
-grid.display
-grid.move( [7,3], [3,7])
-grid.display
-p grid.checkmate?(:black)
-p grid.checkmate?(:white)
+# grid = ChessBoard.new
+# grid.set_board
+# grid.display
+# # puts grid.in_check?(:black)
+# grid.move( [1,5], [2,5])
+# grid.display
+# grid.move( [6,4], [4,4])
+# grid.display
+# grid.move( [1,6], [3,6])
+# grid.display
+# grid.move( [7,3], [3,7])
+# grid.display
+# p grid.checkmate?(:black)
