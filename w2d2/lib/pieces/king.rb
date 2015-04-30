@@ -5,6 +5,6 @@ class King < SteppingPiece
   end
 
   def initial_moves
-    step_moves(UPDOWN_STEPS)
+    step_moves(UPDOWN_STEPS) + step_moves(DIAG_STEPS)
   end
 end

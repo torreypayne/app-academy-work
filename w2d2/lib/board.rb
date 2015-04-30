@@ -122,24 +122,12 @@ class ChessBoard
     false
   end
 
-  # def checkmate?(color)
-  #   return false unless in_check?(color)
-  #   pieces(color).each do |piece|
-  #     return false unless piece.valid_moves.empty?
-  #   end
-  #   true
-  # end
-
   def checkmate?(color)
-    if in_check?(color)
-      pieces(color).each do |piece|
-        return false unless piece.valid_moves.empty?
-      end
-
-      true
-    else
-      false
+    return false unless in_check?(color)
+    pieces(color).each do |piece|
+      return false unless piece.valid_moves.empty?
     end
+    true
   end
 
   def king(color)
@@ -147,18 +135,8 @@ class ChessBoard
     king_tile.pos
   end
 
-  # def pieces(color)
-  #   each_tile.flatten.compact.select { |t| t.color == color }
-  # end
-
   def pieces(color)
-    my_pieces = []
-
-    each_tile do |tile|
-      my_pieces << tile if !tile.nil? && tile.color == color
-    end
-
-    my_pieces
+    @grid.flatten.compact.select { |t| t.color == color }
   end
 
   def other_color(color)
