@@ -17,26 +17,30 @@ class Board
       end
       puts "\n"
     end
+    puts "-----------------------"
   end
 
   def set_board
-    @grid[0].each_with_index do |row_1_tile, col|
-      @grid[0][col] = Piece.new(self, :white, [0, col]) if col.odd?
-    end
-    @grid[1].each_with_index do |row_2_tile, col|
-      @grid[1][col] = Piece.new(self, :white, [1, col]) if col.even?
-    end
-    @grid[2].each_with_index do |row_3_tile, col|
-      @grid[2][col] = Piece.new(self, :white, [2, col]) if col.odd?
-    end
-    @grid[5].each_with_index do |row_1_tile, col|
-      @grid[5][col] = Piece.new(self, :red, [5, col]) if col.even?
-    end
-    @grid[6].each_with_index do |row_1_tile, col|
-      @grid[6][col] = Piece.new(self, :red, [6, col]) if col.odd?
-    end
-    @grid[7].each_with_index do |row_1_tile, col|
-      @grid[7][col] = Piece.new(self, :red, [7, col]) if col.even?
+    [0, 1, 2, 5, 6, 7].each do |row|
+      if [0, 1, 2].include?(row)
+        (0...8).to_a.each do |col|
+          pos = [row, col]
+          if (row == 0 || row == 2)
+            @grid[row][col] = Piece.new(self, :white, pos) if col.odd?
+          else
+            @grid[row][col] = Piece.new(self, :white, pos) if col.even?
+          end
+        end
+      elsif (5...8).to_a.include?(row)
+        (0...8).to_a.each do |col|
+          pos = [row, col]
+          if (row == 5 || row == 7)
+            @grid[row][col] = Piece.new(self, :red, pos) if col.even?
+          else
+            @grid[row][col] = Piece.new(self, :red, pos) if col.odd?
+          end
+        end
+      end
     end
   end
 
@@ -54,11 +58,32 @@ class Board
     pos.first >= 0 && pos.first < 8 && pos.last >= 0 && pos.last < 8
   end
 
-  def occupied(pos)
+  def tile_at(pos)
     @grid[pos]
   end
 
   def occupied?(pos)
-    @grid[pos].nil?
+    !@grid[pos].nil?
+  end
+
+  def dup
+    new_board = Board.new
+    new_board.grid.each_with_index do |row, r_idx|
+      row.each_with_index do |tiles, c_idx|
+        mirror = @grid[r_idx][c_idx]
+        position = [r_idx, c_idx]
+        if !mirror.nil?
+          new_board.grid[r_idx][c_idx] = Piece.new(new_board, mirror.color, position)
+        end
+      end
+    end
+
+    new_board
+  end
+
+
+  def perform_moves!(move_sequence)
+    # Takes sequence/array of positions that are eligible to be popped & exec'ed.
+
   end
 end
