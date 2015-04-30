@@ -65,6 +65,19 @@ class ChessBoard
     end
   end
 
+  def move(start_pos, end_pos)
+    piece = self[start_pos]
+    raise InvalidMoveError.new("No piece here!") if piece.nil?
+    if piece.valid_moves.include?(end_pos)
+      piece.pos = end_pos
+      piece.moved = true
+      self[end_pos] = piece
+      self[start_pos] = nil
+    else
+      raise InvalidMoveError.new("Not a valid move")
+    end
+  end
+
   def each_tile(&prc)
     @grid.each do |row|
       row.each do |tile|
@@ -83,19 +96,6 @@ class ChessBoard
 
   def dup_piece(piece, new_board)
     piece.class.new(new_board, piece.color, piece.pos.dup, piece.moved)
-  end
-
-  def move(start_pos, end_pos)
-    piece = self[start_pos]
-    raise InvalidMoveError.new("No piece here!") if piece.nil?
-    if piece.valid_moves.include?(end_pos)
-      piece.pos = end_pos
-      piece.moved = true
-      self[end_pos] = piece
-      self[start_pos] = nil
-    else
-      raise InvalidMoveError.new("Not a valid move")
-    end
   end
 
   def move!(start_pos, end_pos)
