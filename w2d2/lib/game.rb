@@ -25,6 +25,8 @@ class Game
     puts "#{winner.capitalize} wins!"
   end
 
+  private
+
   def play_current_players_turn
     start_pos, end_pos = @curr_player.play_turn
     assert_correct_player(@curr_player, start_pos)
