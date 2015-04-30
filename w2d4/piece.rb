@@ -116,33 +116,6 @@ class Piece
       raise InvalidMoveError.new "Try again!"
     end
   end
-
-  # def perform_moves!(move_sequence)
-  #   tracker = pos.map { |el| el }
-  #   test_board = board.dup
-  #   test_sequence = move_sequence.map { |el| el }
-  #   until test_sequence.empty?
-  #     p tracker
-  #     output = test_sequence.shift
-  #     x, y = output
-  #     if test_board[[x,y]].nil?
-  #       test_board.grid[tracker.first][tracker.last].perform_slide(x,y)
-  #       test_board.render
-  #       tracker = [x,y]
-  #     else
-  #       test_board[[x,y]].perform_jump(x,y)
-  #       test_board.render
-  #       tracker = [x,y]
-  #     end
-  #   end
-  #
-  #   tracker = pos # This only works if the test moves don't raise an error.
-  #   until move_sequence.empty?
-  #     x, y = move_sequence.pop
-  #     self.perform_slide(x,y)
-  #     tracker = [x,y]
-  #   end
-  # end
 end
 
 board = Board.new
