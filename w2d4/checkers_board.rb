@@ -8,7 +8,9 @@ class Board
   end
 
   def render
-    @grid.each do |row|
+    print "  1 2 3 4 5 6 7 8\n"
+    @grid.each_with_index do |row, r_idx|
+      print (r_idx.to_i + 1).to_s + " "
       row.each do |tile|
         if tile.nil?
           print '[]'
