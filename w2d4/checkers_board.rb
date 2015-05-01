@@ -81,9 +81,9 @@ class Board
     new_board
   end
 
-
-  def perform_moves!(move_sequence)
-    # Takes sequence/array of positions that are eligible to be popped & exec'ed.
-
-  end
+  #
+  # def perform_moves!(move_sequence)
+  #   # Takes sequence/array of positions that are eligible to be popped & exec'ed.
+  #
+  # end
 end

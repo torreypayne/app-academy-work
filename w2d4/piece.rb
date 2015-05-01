@@ -33,9 +33,7 @@ class Piece
     moves = []
     direction = color == :white ? DIAG_STEPS_DOWN : DIAG_STEPS_UP
     direction.each do |next_step|
-      p "Doesn't push in the moves"
       next_move = [pos.first + next_step.first, pos.last + next_step.last]
-      debugger
       moves << next_move if @board.on_board?(next_move) # check for occupation
     end
 
@@ -90,6 +88,7 @@ class Piece
       x, y = output
       if move_sequence.size == 0 || board[[x,y]].nil?
         self.perform_slide(x,y)
+        board.render
       else
         self.perform_jump(x,y)
       end
@@ -110,23 +109,10 @@ class Piece
   end
 
   def perform_moves(moves)
-    if valid_move_seq?(moves)
-      perform_moves!(move)
+    if valid_move_seq?(moves.dup)
+      perform_moves!(moves)
     else
       raise InvalidMoveError.new "Try again!"
     end
   end
 end
-
-board = Board.new
-board.set_board
-board.render
-p board[[2,1]].valid_move_seq?([[3,2]])
-board[[2,1]].perform_moves!([[3,2],[4,3]])
-board.render
-# board2 = board.dup
-# board.render
-# board2.render
-# board.render
-# board[[5,2]].perform_jump(3,4)
-# board.render
