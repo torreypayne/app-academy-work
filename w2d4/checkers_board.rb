@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Board
   attr_accessor :grid
 
@@ -9,11 +11,13 @@ class Board
     @grid.each do |row|
       row.each do |tile|
         if tile.nil?
-          print '_'
+          print '[]'
           next
         end
-        print 'R' if tile.color == :red
-        print 'W' if tile.color == :white
+        print "\u26C2 ".red if tile.color == :red && !tile.king
+        print "\u26C0 ".white if tile.color == :white && !tile.king
+        print "\u26C3 ".red if tile.color == :red && tile.king
+        print "\u26C1 ".white if tile.color == :white && tile.king
       end
       puts "\n"
     end
