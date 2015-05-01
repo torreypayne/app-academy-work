@@ -64,3 +64,19 @@ describe "Array" do
     end
   end
 end
+
+describe "#stock_picker" do
+
+  context "Stock Picker" do
+
+    let(:stockprices) { [6,11,9,8,15,13,14,18,21,9,11,17] }
+
+    it "knows when there is know profit made" do
+      expect(stock_picker([3,2])).to be_empty
+    end
+
+    it "returns a valid index" do
+      expect(stock_picker(stockprices)).to eq([0,8])
+    end
+  end
+end
