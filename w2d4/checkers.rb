@@ -3,7 +3,7 @@ require_relative 'checkers_board'
 require_relative 'piece'
 
 class CheckersGame
-  attr_accesor :board
+  attr_accessor :board
 
   def initialize(board, player1, player2)
     @p1 = player1
@@ -27,10 +27,12 @@ class CheckersGame
   end
 
   def play
+    board.render
     until over?
       curr_player = @turn == :white ? @p1 : @p2
-      curr_player.play_turn
+      curr_player.play_turn(board, @turn)
       @turn = other_player(@turn)
+      board.render
     end
 
     puts "Game Over. #{curr_player.name} won!"
@@ -41,13 +43,13 @@ class CheckersGame
   end
 
   def over?
-    return true unless pieces.any? { |pieces| piece.color == :white }
-    return true unless pieces.any? { |pieces| piece.color == :red }
+    return true unless pieces.any? { |piece| piece.color == :white }
+    return true unless pieces.any? { |piece| piece.color == :red }
   end
 end
 
-board = CheckersBoard.new
-torrey = HumanPlayer.new(board, "Torrey")
-jon = HumanPlayer.new(board, "Jon")
+board = Board.new
+torrey = HumanPlayer.new("Torrey")
+jon = HumanPlayer.new("Jon")
 juego = CheckersGame.new(board, torrey, jon)
-juego.pieces
+juego.play
