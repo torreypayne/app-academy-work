@@ -14,6 +14,9 @@ class Piece
   DIAG_STEPS_UP = [[-1,-1], [-1,1]]
   DIAG_JUMPS_UP = [[-2,-2], [-2,2]]
 
+  KING_STEPS = DIAG_STEPS_DOWN + DIAG_STEPS_UP
+  KING_JUMPS = DIAG_JUMPS_DOWN + DIAG_JUMPS_UP
+
   def initialize(board, color, pos, king = false)
     @board  = board
     @color = color
@@ -32,6 +35,7 @@ class Piece
   def simple_moves
     moves = []
     direction = color == :white ? DIAG_STEPS_DOWN : DIAG_STEPS_UP
+    direction = KING_STEPS if king?
     direction.each do |next_step|
       next_move = [pos.first + next_step.first, pos.last + next_step.last]
       moves << next_move if @board.on_board?(next_move) && @board[next_move].nil?# check for occupation
@@ -43,6 +47,7 @@ class Piece
   def simple_jumps
     jumps = []
     direction = color == :white ? DIAG_JUMPS_DOWN : DIAG_JUMPS_UP
+    direction = KING_JUMPS if king?
     direction.each do |jump|
       x, y = jump
       jump = [pos.first + x, pos.last + y]
@@ -69,6 +74,11 @@ class Piece
     @pos = coord
     board[coord] = self
     board[old_pos] = nil
+  end
+
+  def becomes_king?
+    @king = true if pos.first == 0 && color == :red
+    @king = true if pos.first == 7 && color == :white
   end
 
   def perform_jump(dx,dy)
@@ -113,6 +123,7 @@ class Piece
   def perform_moves(moves)
     if valid_move_seq?(moves.dup)
       perform_moves!(moves)
+      becomes_king?
     else
       raise InvalidMoveError.new "Try again!"
     end
