@@ -34,7 +34,7 @@ class Piece
     direction = color == :white ? DIAG_STEPS_DOWN : DIAG_STEPS_UP
     direction.each do |next_step|
       next_move = [pos.first + next_step.first, pos.last + next_step.last]
-      moves << next_move if @board.on_board?(next_move) # check for occupation
+      moves << next_move if @board.on_board?(next_move) && @board[next_move].nil?# check for occupation
     end
 
     moves
@@ -48,6 +48,7 @@ class Piece
       jump = [pos.first + x, pos.last + y]
       # Check if jump is empty
       middle_tile = board[[pos.first + x.div(2), pos.last + y.div(2)]]
+      p "gets here"
       next if (middle_tile.nil? || !board[jump].nil?)
       next unless board.on_board?(jump) && middle_tile.between_tile?(color)
       jumps << jump
@@ -62,8 +63,8 @@ class Piece
   end
 
   def perform_slide(dx,dy)
-    raise InvalidMoveError.new "Not valid move!" unless simple_moves.include?([dx,dy])
     coord = [dx,dy]
+    raise InvalidMoveError.new "Not valid move!" unless simple_moves.include?(coord)
     old_pos = @pos
     @pos = coord
     board[coord] = self
@@ -71,8 +72,8 @@ class Piece
   end
 
   def perform_jump(dx,dy)
-    raise InvalidMoveError.new "Not valid move!" if !simple_jumps.include?([dx,dy])
     coord = [dx,dy]
+    raise InvalidMoveError.new "Not valid move!" unless simple_jumps.include?(coord)
     old_pos = @pos # This makes calculating mid-point cleaner
     x, y = old_pos
     @pos = coord
@@ -86,7 +87,8 @@ class Piece
     until move_sequence.empty?
       output = move_sequence.shift
       x, y = output
-      if move_sequence.size == 0 || board[[x,y]].nil?
+      diff = pos.first - x
+      if (diff == 1 || diff == -1)
         self.perform_slide(x,y)
         board.render
       else
