@@ -1,8 +1,10 @@
 require 'hand'
+require 'deck'
 require 'rspec'
 
 describe "Hand" do
-  subject(:hand) { Hand.new }
+  let(:deck) {Deck.new}
+  subject(:hand) { Hand.new(deck) }
 
   context "initialize hand of 5 cards" do
     it "is five cards" do
@@ -11,10 +13,9 @@ describe "Hand" do
   end
 
   context "evaluate correct hands" do
-    let(:deck) {Deck.new}
 
     it "evaluate two pair" do
-      expect(Hand.evalute([1,2,3,4,4])).to eq(:two_pair)
+      expect(hand.evaluate).to_not eq(nil)
     end
   end
 end
