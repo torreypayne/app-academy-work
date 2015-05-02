@@ -14,8 +14,9 @@ describe "Hand" do
 
   context "evaluate correct hands" do
 
-    it "evaluate two pair" do
+    it "evaluates hands" do
       expect(hand.evaluate).to_not eq(nil)
     end
+    # Need to make a "stacked" deck to test methods on
   end
 end
