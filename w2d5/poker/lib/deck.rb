@@ -12,12 +12,12 @@ class Deck
       Card.suits.each { |suit| cards << Card.new(suit, rank) }
     end
 
-    cards
+    cards.shuffle
   end
 
-  def shuffle
-    @cards.shuffle
-  end
+  # def shuffle
+  #   @cards.shuffle
+  # end
 
   def draw(num = 1)
     @cards.pop(num)

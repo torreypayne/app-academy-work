@@ -1,3 +1,5 @@
+require_relative 'deck'
+
 class Hand
 #     Royal flush <0.01%
 # Straight flush (not including royal flush) <0.01%
@@ -10,8 +12,8 @@ class Hand
 # One pair 42.30%
 # No pair / High card 50.10%
 
-  def initialize(deck)
-    @hand = deck.draw(5)
+  def initialize(deck, hand = nil)
+    hand.nil? ? @hand = deck.draw(5) : hand
     @deck = deck
   end
 
@@ -21,19 +23,19 @@ class Hand
 
   def values
     values = []
-    self.each { |card| values << card.value unless values.include?(card.value) }
+    self.hand.each { |card| values << card.value unless values.include?(card.value) }
     values
   end
 
   def order_ranks
-    self.sort_by { |card| card.value }
+    self.hand.sort_by { |card| card.value }
   end
 
   def evaluate
 
-    if royal_flush
-      return :royal_flush
-    elsif straight_flush
+    # if royal_flush
+    #   return :royal_flush
+    if straight_flush
       return :straight_flush
     elsif four_kind
       return :four_of_a_kind
@@ -53,19 +55,28 @@ class Hand
       return :high_card
     end
 
+  end
 
-  def self.flush
-    first_card = self.first
-    return false if self.any? { |card| card.suit != first_card.suit}
+  def straight_flush
+    self.flush && self.straight
+  end
+
+  def four_kind
+    hand.each { |card| return true if self.hand.count(card) == 4 }
+  end
+
+  def flush
+    first_card = self.hand.first
+    return false if self.hand.any? { |card| card.suit != first_card.suit}
     true
   end
 
-  def self.fullhouse
+  def fullhouse
     three_kind && values.size == 2
   end
 
-  def self.straight
-    sorted_hand = self.order_ranks
+  def straight
+    sorted_hand = self.hand.order_ranks
     sorted_hand.each_with_index do |card, index|
       next if index == (sorted_hand.size - 1)
       return false unless (card.value + 1 == sorted_hand[index + 1].value)
@@ -74,8 +85,8 @@ class Hand
   end
 
   def three_kind
-    self.each do |card|
-      return true is self.count(card) == 3
+    self.hand.each do |card|
+      return true if self.hand.count(card) == 3
     end
 
     false
@@ -83,7 +94,7 @@ class Hand
 
   def two_pair
     tracker = 0
-    sorted_hand = self.order_ranks
+    sorted_hand = self.hand.order_ranks
     sorted_hand.reverse.each do |card|
       tracker += 1 if sorted_hand.count(card) == 2
     end
@@ -91,9 +102,9 @@ class Hand
     false
   end
 
-  def self.pair
-    sorted_hand = self.order_ranks
-    sorted_hand.each { |card| return true if self.count(card) == 2 }
+  def pair
+    sorted_hand = self.hand.order_ranks
+    sorted_hand.each { |card| return true if self.hand.count(card) == 2 }
     false
   end
 
@@ -109,3 +120,7 @@ class Hand
     @hand << @deck.draw(discarded.size)
   end
 end
+
+deck = Deck.new
+hand = Hand.new(deck)
+p hand.values
