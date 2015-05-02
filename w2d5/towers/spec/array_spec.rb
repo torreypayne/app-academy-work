@@ -17,6 +17,10 @@ describe "Array" do
     it "returns unique elements" do
       expect([3,3,2,2,1,1].my_uniq).to eq([3,2,1])
     end
+
+    it "accurately accounts for dup non-adjacent elements" do
+      expect([3,3,2,2,1,2,3].my_uniq).to eq([3,2,1])      
+    end
   end
 
   context "sums two numbers and returns the pair of indices that sum to zero" do
