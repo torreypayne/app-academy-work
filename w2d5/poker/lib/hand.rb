@@ -35,21 +35,21 @@ class Hand
 
     # if royal_flush
     #   return :royal_flush
-    if straight_flush
+    if straight_flush?
       return :straight_flush
-    elsif four_kind
+    elsif four_kind?
       return :four_of_a_kind
-    elsif full_house
+    elsif full_house?
       return :full_house
-    elsif flush
+    elsif flush?
       return :flush
-    elsif straight
+    elsif straight?
       return :straight
-    elsif three_kind
+    elsif three_kind?
       return :three_of_a_kind
-    elsif two_pair
+    elsif two_pair?
       return :two_pair
-    elsif pair
+    elsif pair?
       return :one_pair
     else
       return :high_card
@@ -57,58 +57,58 @@ class Hand
 
   end
 
-  def straight_flush
-    self.flush && self.straight
+  def straight_flush?
+    flush? && straight?
   end
 
-  def four_kind
-    hand.each { |card| return true if self.hand.count(card) == 4 }
+  def four_kind?
+    hand.each { |card| return true if hand.count(card) == 4 }
+    false
   end
 
-  def flush
+  def flush?
     first_card = self.hand.first
     return false if self.hand.any? { |card| card.suit != first_card.suit}
     true
   end
 
-  def fullhouse
-    three_kind && values.size == 2
+  def full_house?
+    three_kind? && values.size == 2
   end
 
-  def straight
-    sorted_hand = self.hand.order_ranks
-    sorted_hand.each_with_index do |card, index|
-      next if index == (sorted_hand.size - 1)
-      return false unless (card.value + 1 == sorted_hand[index + 1].value)
+  def straight?
+    hand.each_with_index do |card, index|
+      next if index == (hand.size - 1)
+      return false unless (card.value + 1 == hand[index + 1].value)
     end
     true
   end
 
-  def three_kind
-    self.hand.each do |card|
-      return true if self.hand.count(card) == 3
+  def three_kind?
+
+    hand.each do |card|
+      ok_kind = []
+      of_kind = hand.select { |other_card| card.value == other_card.value }
+      return true if of_kind.size >= 3
     end
 
     false
   end
 
-  def two_pair
-    tracker = 0
-    sorted_hand = self.hand.order_ranks
-    sorted_hand.reverse.each do |card|
-      tracker += 1 if sorted_hand.count(card) == 2
+  def two_pair?
+    values.size == 3 && !three_kind?
+  end
+
+  def pair?
+    hand.each do |card|
+      of_kind = hand.select { |other_card| card.value == other_card.value }
+      return true if of_kind.size >=2
     end
-    return true if tracker == 4
+    # hand.each { |card| return true if hand.count(card) == 2 }
     false
   end
 
-  def pair
-    sorted_hand = self.hand.order_ranks
-    sorted_hand.each { |card| return true if self.hand.count(card) == 2 }
-    false
-  end
-
-  protected
+  # protected
 
   def hand
     @hand
@@ -123,4 +123,6 @@ end
 
 deck = Deck.new
 hand = Hand.new(deck)
+p hand.evaluate
 p hand.values
+p hand.hand
