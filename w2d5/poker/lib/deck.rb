@@ -20,7 +20,7 @@ class Deck
   # end
 
   def draw(num = 1)
-    @cards.pop(num)
+    @cards.shift(num)
   end
 
   def count
