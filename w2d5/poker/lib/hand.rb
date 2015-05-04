@@ -12,13 +12,20 @@ class Hand
 # One pair 42.30%
 # No pair / High card 50.10%
 
-  def initialize(deck, hand = nil)
-    hand.nil? ? @hand = deck.draw(5) : hand
-    @deck = deck
+  attr_accessor :cards
+
+  def initialize(cards)
+    @cards = Array.new(cards)
   end
 
   def cards
-    @hand.size
+    @cards.size
+  end
+
+  def to_s
+    display = []
+    @cards.each { |card| display << card.rank.to_s}
+    display
   end
 
   def values
@@ -28,7 +35,7 @@ class Hand
   end
 
   def order_ranks
-    self.hand.sort_by { |card| card.value }
+    @cards.sort_by { |card| card.value }
   end
 
   def evaluate
@@ -67,7 +74,7 @@ class Hand
   end
 
   def flush?
-    first_card = self.hand.first
+    first_card = cards.first
     return false if self.hand.any? { |card| card.suit != first_card.suit}
     true
   end
@@ -95,6 +102,10 @@ class Hand
     false
   end
 
+  def draw(cards)
+    cards.each { |card| @cards << card }
+  end
+
   def two_pair?
     values.size == 3 && !three_kind?
   end
@@ -114,15 +125,10 @@ class Hand
     @hand
   end
 
-  def discard(*nums)
+  def discard(nums)
     discarded = []
-    nums.each { |num| discarded << @hand.delete_at(num) }
-    @hand << @deck.draw(discarded.size)
+    nums.each { |num| discarded << @hand[num] = nil }
+    @hand.compact
+    return discarded
   end
 end
-
-deck = Deck.new
-hand = Hand.new(deck)
-p hand.evaluate
-p hand.values
-p hand.hand
