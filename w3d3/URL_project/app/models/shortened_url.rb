@@ -5,7 +5,7 @@
 #  id           :integer          not null, primary key
 #  long_url     :string
 #  short_url    :string
-#  submitter_id :string
+#  submitter_id :integer
 #  created_at   :datetime
 #  updated_at   :datetime
 #
@@ -32,6 +32,7 @@ class ShortenedUrl < ActiveRecord::Base
 
   has_many(
     :visitors,
+    Proc.new { distinct },
     through: :visits,
     source: :user
   )
@@ -48,6 +49,28 @@ class ShortenedUrl < ActiveRecord::Base
 
   def self.create_for_user_and_long_url!(user, long_url)
     new_url = ShortenedUrl.random_code
-    ShortenedUrl.create!(long_url: long_url,short_url: new_url,submitter_id: user.id)
+    ShortenedUrl.create!(long_url: long_url,short_url: new_url, submitter_id: user.id)
+  end
+
+  def num_clicks
+    self.visits.count
+  end
+
+  def num_uniques
+    visitors.count
+  end
+
+  def num_recent_uniques
+    user_ids = []
+    self.visits.each do |visit|
+      user_ids << visit.user_id if visit.created_at <= 10.minutes.ago
+    end
+
+    user_ids.uniq.count
   end
 end
+
+torrey = User.first
+jade = User.second
+u1 = ShortenedUrl.first
+u2 = ShortenedUrl.second

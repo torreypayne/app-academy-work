@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: visits
+#
+#  id         :integer          not null, primary key
+#  url_id     :integer
+#  user_id    :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Visit < ActiveRecord::Base
 
   belongs_to(
