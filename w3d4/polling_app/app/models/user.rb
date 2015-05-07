@@ -17,23 +17,37 @@ class User < ActiveRecord::Base
   def completed_polls
     Poll.find_by_sql([<<-SQL, id])
       SELECT
-        polls.*, COUNT(questions.id)
+        polls.*
       FROM
         polls
       JOIN
-        questions ON poll.id = questions.poll_id # Where we stopped!!
+        questions ON polls.id = questions.poll_id
       JOIN
-        responses ON responses.user_id = user.id
-      JOIN
-        answer_choices ON responses.answer_choice_id = answer_choices.id
-      JOIN
-        polls ON questions.poll_id = polls.id
+        answer_choices ON questions.id = answer_choices.question_id
+      LEFT JOIN
+        responses ON responses.answer_choice_id = answer_choices.id
       WHERE
-        user.id = ?
+        responses.user_id = ? OR responses.user_id IS NULL
       GROUP BY
         polls.id
       HAVING
         COUNT(questions.id) = COUNT(responses.id)
     SQL
+  end
+
+  def completed_polls_ar
+    Poll.select('polls.*').joins(:answer_choices)
+      .joins('LEFT JOIN responses ON responses.answer_choice_id = answer_choices.id')
+      .where('responses.user_id = ?', id)
+      .group(:poll_id)
+      .having('COUNT(questions.id) = COUNT(responses.id)')
+  end
+
+  def uncompleted_polls_ar
+    Poll.select('polls.*').joins(:answer_choices)
+      .joins('LEFT JOIN responses ON responses.answer_choice_id = answer_choices.id')
+      .where('responses.user_id = ? OR responses.user_id IS NULL', id)
+      .group(:poll_id)
+      .having('COUNT(DISTINCT questions.id) > COUNT(DISTINCT responses.id)')
   end
 end
