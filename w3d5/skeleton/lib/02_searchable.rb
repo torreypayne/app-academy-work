@@ -13,7 +13,6 @@ module Searchable
       FROM #{self.table_name}
       WHERE #{where_line}
     SQL
-    debugger
     result.each.map { |result| self.new(result) }
 
     # ...
