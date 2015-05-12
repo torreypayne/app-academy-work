@@ -1,40 +1,44 @@
 class UsersController < ApplicationController
   def index
-    render text: "I'm in the index action!"
+    render json: User.all
   end
 
   def show
-    render json: params["some_category"]
+    user = User.find(params[:id])
+    render json: user
   end
 
   def update
     user = User.find(params[:id])
-    new_email = params[:user][:email]
-    new_name = params[:user][:name]
-    user[:email] = new_email
-    user.save!
-    render json: user
+    new_username = params[:user][:username]
+    user.username = new_username
+    my_render(user)
   end
 
   def create
     user = User.new(user_params)
-    if user.save
-      render json: user
-    else
-      render(
-        json: user.errors.full_messages, status: :unprocessable_entity
-      )
-    end
+    my_render(user)
   end
 
   def destroy
+    username = User.find(params[:id]).username
     User.destroy(params[:id])
-    render text: "deleted user at #{params}"
+    render text: "deleted user #{username}"
   end
 
   private
 
   def user_params
-    params[:user].permit(:name, :email)
+    params.require(:user).permit(:username)
+  end
+
+  def my_render(user)
+    if user.save
+      render json: user
+    else
+      render(
+        json: user.errors.full_messages, status: unprocessable_entity
+      )
+    end
   end
 end
