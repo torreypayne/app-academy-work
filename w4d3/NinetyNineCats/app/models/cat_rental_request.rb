@@ -20,11 +20,10 @@ class CatRentalRequest < ActiveRecord::Base
       self.status = "APPROVED"
       self.save!
 
-      overlapping_pending_requests.update_all(status: 'DENIED')
-      # overlapping_pending_requests.each do |request|
-      #   request.status = "DENIED"
-      #   request.save!
-      # end
+      overlapping_pending_requests.each do |request|
+        request.status = "DENIED"
+        request.save!
+      end
     end
   end
 

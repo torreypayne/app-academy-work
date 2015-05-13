@@ -32,9 +32,6 @@ class CatRentalRequestsController < ApplicationController
     render json: @cat_rental_request
   end
 
-  def cat_rental_request_params
-    params.require(:cat_rental_request).permit(:start_date, :end_date, :cat_id)
-  end
 
   def approve
     @request = CatRentalRequest.find(params[:id])
@@ -46,6 +43,17 @@ class CatRentalRequestsController < ApplicationController
     @request = CatRentalRequest.find(params[:id])
     @request.deny! # deny!
     redirect_to cat_url(@request.cat_id)
+  end
+
+  private
+
+  def cat_rental_request_params
+    params.require(:cat_rental_request).permit(:start_date, :end_date, :cat_id)
+  end
+
+  def owns_cat
+    request = CatRentalRequest.find(params[:id])
+    redirect_to cats_url unless request.cat.owner.id == current_user.id
   end
 
 end
