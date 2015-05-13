@@ -1,5 +1,7 @@
 class CatRentalRequestsController < ApplicationController
 
+  before_action :owns_cat, only: [:approve, :deny]
+
   # def index
   #   render json: Cat.find(params[:cat_id]).cat_rental_requests
   # end
@@ -17,6 +19,7 @@ class CatRentalRequestsController < ApplicationController
 
   def create
     @new_request = CatRentalRequest.new(cat_rental_request_params)
+    @new_request.user_id = current_user.id
     if @new_request.save
       redirect_to cat_rental_request_url(@new_request)
     else

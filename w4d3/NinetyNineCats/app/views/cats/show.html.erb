@@ -14,9 +14,12 @@
 <% @cat.cat_rental_requests.order("start_date").each do |rental| %>
 <% next if rental.status == "DENIED" %>
   <p>
+    Requested By: <%= rental.requester.username %>
     <%= [rental.start_date, rental.end_date] %>
-    <%= button_to 'approve', approve_cat_rental_request_url(rental), method: :patch %>
-    <%= button_to 'deny', deny_cat_rental_request_url(rental), method: :patch %>
+    <% if @cat.owner == current_user %>
+      <%= button_to 'approve', approve_cat_rental_request_url(rental), method: :patch %>
+      <%= button_to 'deny', deny_cat_rental_request_url(rental), method: :patch %>
+    <% end %>
   </p>
   <br>
 <% end %>
