@@ -1,3 +1,4 @@
 Rails.application.routes.draw do
-  resources :users, only: [:create, :new, :show, :index]
+  resource :user, only: [:create, :new, :show]
+  resource :session, only: [:create, :destroy, :new] # Can only be one session per user
 end
