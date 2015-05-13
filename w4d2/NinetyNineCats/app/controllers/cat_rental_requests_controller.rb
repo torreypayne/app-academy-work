@@ -41,7 +41,7 @@ class CatRentalRequestsController < ApplicationController
 
   def deny
     @request = CatRentalRequest.find(params[:id])
-    @request.approve! # deny!
+    @request.deny! # deny!
     redirect_to cat_url(@request.cat_id)
   end
 

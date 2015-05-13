@@ -5,7 +5,7 @@ class Cat < ActiveRecord::Base
   validate :valid_age
   validate :valid_sex
   has_many :cat_rental_requests, dependent: :destroy
-  
+
 
   COLORS = ["Blue", "Red", "Green", "Orange", "Yellow", "Brown", "Black"]
 
@@ -17,21 +17,21 @@ class Cat < ActiveRecord::Base
   private
 
   def valid_color
-    return nil if self.color.nil?
+    # return nil if self.color.nil?
     if !COLORS.include?(self.color)
-      errors[:color] << "Invalid Cat Color"
+      errors[:color] << "Invalid Cat Color" # Remember what validate looks for!
     end
   end
 
   def valid_age
-    return nil if self.birth_date.nil?
+    # return nil if self.birth_date.nil?
     if birth_date > Time.now
       errors[:age] << "Invalid birth date"
     end
   end
 
   def valid_sex
-    return nil if self.sex.nil?
+    # return nil if self.sex.nil?
     if !["M", "F"].include?(self.sex)
       errors[:sex] << "Invalid Cat gender"
     end
