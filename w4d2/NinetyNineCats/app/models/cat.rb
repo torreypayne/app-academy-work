@@ -1,9 +1,16 @@
+# require 'action_view'    What does that mean?
+
 class Cat < ActiveRecord::Base
   validates :birth_date, :color, :name, :sex, :description, presence: true
 
-  validate :valid_color
-  validate :valid_age
-  validate :valid_sex
+  validates :color, inclusion: CAT_COLORS
+  validates :sex, inclusion: %w(M F)
+
+  # The above is a cleaner way of doing the custom validations below.
+  #
+  # validate :valid_color
+  # validate :valid_age
+  # validate :valid_sex
   has_many :cat_rental_requests, dependent: :destroy
 
 

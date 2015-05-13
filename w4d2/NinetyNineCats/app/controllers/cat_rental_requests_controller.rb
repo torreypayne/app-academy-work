@@ -1,8 +1,8 @@
 class CatRentalRequestsController < ApplicationController
 
-  def index
-    render json: Cat.find(params[:cat_id]).cat_rental_requests
-  end
+  # def index
+  #   render json: Cat.find(params[:cat_id]).cat_rental_requests
+  # end
 
   def new
     if params[:cat_id].nil?
@@ -12,7 +12,7 @@ class CatRentalRequestsController < ApplicationController
       @cat = Cat.find(params[:cat_id])
     end
     @cats = Cat.all
-    render :new
+    # render :new isn't needed; it's implicit
   end
 
   def create
@@ -20,7 +20,7 @@ class CatRentalRequestsController < ApplicationController
     if @new_request.save
       redirect_to cat_rental_request_url(@new_request)
     else
-      render :new
+      flash.now[:errors] = @new_request.errors.full_messages
     end
   end
 

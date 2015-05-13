@@ -20,8 +20,8 @@ class CatsController < ApplicationController
     if @cat.update(cat_params)
       redirect_to cat_url(@cat)
     else
-      # render :edit
-      redirect_to edit_cat_url(@cat)
+      flash.now[:errors] = @cat.errors.full_messages
+      render :edit
     end
   end
 
@@ -35,7 +35,8 @@ class CatsController < ApplicationController
     if new_cat.save
       redirect_to cat_url(new_cat)
     else
-      render json: new_cat.errors.full_messages
+      flash.now[:errors] << @cat.errors.full_messages
+      render :new
     end
   end
 
