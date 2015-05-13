@@ -27,4 +27,6 @@ CatRentalRequest.create!(four_rental)
 CatRentalRequest.create!(five_rental)
 CatRentalRequest.create!(six_rental)
 
+# User.create(username: 'alex', password_digest)
+
 # x = {cat_id: 1, start_date: Date.parse("2015-01-01"), end_date: Date.parse("2015-01-12"), status: "APPROVED"}
