@@ -5,10 +5,13 @@ class User < ActiveRecord::Base
   validates :username, :session_token, uniqueness: true
   validates :password, length: { minimum: 6, allow_nil: true }
 
+  has_many :cats
+  has_many :cat_rental_requests
+
   after_initialize :ensure_session_token
 
   def self.find_by_credentials(user_name, password)
-    user = User.find(username: user_name)
+    user = User.find_by(username: user_name)
 
     if user && user.is_password?(password)
       return user
@@ -36,6 +39,7 @@ class User < ActiveRecord::Base
 
   def reset_session_token!
     self.session_token = User.create_session_token
-    session[:session_token] = self.session_token
+    save!
+    self.session_token
   end
 end

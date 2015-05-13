@@ -1,20 +1,29 @@
 # require 'action_view'    What does that mean?
 
 class Cat < ActiveRecord::Base
+  CAT_COLORS = ["Blue", "Red", "Green", "Orange", "Yellow", "Brown", "Black"]
   validates :birth_date, :color, :name, :sex, :description, presence: true
 
   validates :color, inclusion: CAT_COLORS
   validates :sex, inclusion: %w(M F)
+  validates :user_id, presence: true
 
   # The above is a cleaner way of doing the custom validations below.
   #
   # validate :valid_color
   # validate :valid_age
   # validate :valid_sex
+
+  belongs_to(
+  :owner,
+  class_name: 'User',
+  foreign_key: :user_id,
+  primary_key: :id
+  )
   has_many :cat_rental_requests, dependent: :destroy
 
 
-  COLORS = ["Blue", "Red", "Green", "Orange", "Yellow", "Brown", "Black"]
+
 
 
   def age
