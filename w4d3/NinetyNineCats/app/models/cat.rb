@@ -30,6 +30,10 @@ class Cat < ActiveRecord::Base
     (Time.now - birth_date)
   end
 
+  def find_with_owner_and_requests
+    # User.find
+  end
+
   private
 
   def valid_color

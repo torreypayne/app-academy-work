@@ -8,7 +8,10 @@ class CatsController < ApplicationController
   end
 
   def show
-    @cat = Cat.find(params[:id])
+    @cat = Cat.includes(:owner).find(params[:id])
+    @ordered_requests = @cat.cat_rental_requests.includes(:requester).order("start_date")
+    @pending_requests = @ordered_requests.select { |request| request.status == "PENDING" }
+    @approved_requests = @ordered_requests.select { |request| request.status == "APPROVED"}
     render :show
   end
 
@@ -45,9 +48,9 @@ class CatsController < ApplicationController
 
   private
 
-  # def owns_cat
-  #   redirect_to cats_url unless current_user.id == cat.user_id
-  # end
+  def owns_cat
+    redirect_to cats_url unless current_user.id == params[:user_id]
+  end
 
   def cat_params
     params.require(:cat).permit(:birth_date, :color, :name, :sex, :description)

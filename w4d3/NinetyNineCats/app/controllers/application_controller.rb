@@ -18,11 +18,9 @@ class ApplicationController < ActionController::Base
     user.reset_session_token!
   end
 
+  private
+
   def already_logged_in
     redirect_to cats_url if current_user
-  end
-
-  def owns_cat
-    redirect_to cats_url unless cat.owner == current_user
   end
 end
