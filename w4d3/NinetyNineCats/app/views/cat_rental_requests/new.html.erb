@@ -8,9 +8,9 @@
 
   <label for="cat">Cat</label>
   <select name="cat_rental_request[cat_id]" id="cat">
-    <option value=""></option>
+    <option></option>
     <% @cats.each do |cat| %>
-      <option value="<%cat.id%>" <%=cat == @cat ? "selected" : "" %> ><%= cat.name %></option>
+      <option value="<%= cat.id %>" <%=cat == @cat ? "selected" : "" %> ><%= cat.name %></option>
     <% end %>
   </select>
 

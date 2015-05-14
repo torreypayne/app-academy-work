@@ -30,9 +30,10 @@ class Cat < ActiveRecord::Base
     (Time.now - birth_date)
   end
 
-  def find_with_owner_and_requests
-    # User.find
-  end
+  # def find_with_owner_and_requests
+  #   self.
+  #   # @cat = Cat.find(params[:id]).includes(:owner, :cat_rental_requests)
+  # end
 
   private
 

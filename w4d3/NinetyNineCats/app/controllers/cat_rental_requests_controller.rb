@@ -21,9 +21,10 @@ class CatRentalRequestsController < ApplicationController
     @new_request = CatRentalRequest.new(cat_rental_request_params)
     @new_request.user_id = current_user.id
     if @new_request.save
-      redirect_to cat_rental_request_url(@new_request)
+      redirect_to cat_url(@new_request.cat)
     else
       flash.now[:errors] = @new_request.errors.full_messages
+      render :new
     end
   end
 
