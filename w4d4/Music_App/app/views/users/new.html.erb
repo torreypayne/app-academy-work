@@ -1,0 +1,19 @@
+<h1>Sign Up</h1>
+
+<form action="<%= users_url %>" method="post">
+  <input
+  type="hidden"
+  name="authenticity_token"
+  value="<%= rand(1000) %>">
+  <input type="hidden" name="_method" value="POST">
+
+
+  <label>Email</label>
+  <input type="text" name="user[email]">
+  <br>
+
+  <label>Password</label>
+  <input type="password" name="user[password]" value="">
+
+  <input type="submit" value="Sign in!">
+</form>
