@@ -1,1 +1,6 @@
-<p> <%= session[:session_token] %></p>
+<!-- <p> <%= session[:session_token] %></p> -->
+
+<% user = User.find(params[:id]) %>
+<p><%= user.email %></p>
+
+<p><%= link_to "All The Bands That Will Make You Dance", bands_url %></p>

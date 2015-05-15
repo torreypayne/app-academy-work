@@ -1,6 +1,7 @@
 class Track < ActiveRecord::Base
-  validates :band_id, :kind, :track_name, presence: true
+  validates :album_id, :kind, :track_name, presence: true
 
   belongs_to :album
-  belongs_to(:band, through: :album, source: :band)
+  has_many :notes
+  has_one(:band, through: :album, source: :band)
 end
