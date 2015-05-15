@@ -8,11 +8,14 @@
 </head>
 <body>
 
-  <% if current_user %>
-    <%= button_to "Sign Out", session_url, method: :delete %>
-  <% end %>
+
+  <%= render partial: "shared/errors" %>
 
 <%= yield %>
 
+  <% if current_user %>
+    
+    <%= button_to "Sign Out", session_url, method: :delete %>
+  <% end %>
 </body>
 </html>
