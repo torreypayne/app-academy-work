@@ -1,0 +1,22 @@
+<%= @comment.content %>
+
+<ul>
+<% @comment.child_comments.each do |comment| %>
+  <li> <%= link_to comment.content, comment_url(comment) %> </li>
+  <% end %>
+</ul>
+
+<%= link_to "Leave new comment!", comments_new_url(@comment) %>
+
+<form action="<%=comments_url %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="comment[commentable_type]" value="Comment">
+  <input type="hidden" name="comment[commentable_id]" value="<%= params[:id] %>">
+  <input type="hidden" name="comment[parent_comment_id]" value="<%= params[:id] %>">
+
+  <label for="content">Content:</label>
+  <textarea id="content" value="<%= @comment.content %>" name="comment[content]"></textarea><br>
+
+  <input type="submit" value="Create comment!">
+
+</form>

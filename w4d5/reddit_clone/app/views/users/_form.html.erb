@@ -1,0 +1,18 @@
+<% action_url = user.persisted? ? user_url(user) : users_url %>
+<% method_action = user.persisted? ? :patch : :post %>
+<% submit_action = user.persisted? ? "Edit user!" : "Create user!" %>
+
+
+<form action="<%= action_url %>" method="post">
+  <input type="hidden" name="_method" value="<%= method_action %>">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+
+  <label for="username">Username</label>
+  <input type="text" id="username" value="<%= user.username %>" name="user[username]"><br>
+
+  <label for="password">Password</label>
+  <input type="password" id="password" value="<%= user.password %>" name="user[password]"><br>
+
+  <input type="submit" value="<%= submit_action %>">
+
+</form>

@@ -1,0 +1,9 @@
+<%= @post.title %>
+
+<ul>
+  <% @post.comments.each do |comment| %>
+    <li> <%= link_to comment.content, comment %> </li>
+  <% end %>
+</ul>
+
+<%= link_to "Leave A Comment!", new_post_comment_url(@post)  %>

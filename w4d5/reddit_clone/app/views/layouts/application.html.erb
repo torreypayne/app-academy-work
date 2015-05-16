@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<% if logged_in? %>
+  <%= current_user.username %>
+  <%= button_to "Sign out!", session_url, method: :delete %>
+<% end %>
+
+<head>
+  <title>RedditClone</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<% if flash[:errors] %>
+  <% flash[:errors].each do |error| %>
+    <%= error %>
+  <% end %>
+<% end %>
+<%= yield %>
+
+</body>
+</html>
