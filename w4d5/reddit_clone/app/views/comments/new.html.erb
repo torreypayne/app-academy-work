@@ -1,0 +1,16 @@
+<h1>Comments#new</h1>
+<% commentable_value = params[:post_id] ? "Post" : "Comment" %>
+<% commentable_id = params[:post_id] ? params[:post_id].to_i : @comment.id %>
+
+
+<form action="<%=comments_url %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="comment[commentable_type]" value="<%= commentable_value %>">
+  <input type="hidden" name="comment[commentable_id]" value="<%= commentable_id %>">
+
+  <label for="content">Content:</label>
+  <textarea id="content" value="<%= @comment.content %>" name="comment[content]"></textarea><br>
+
+  <input type="submit" value="Create comment!">
+
+</form>
