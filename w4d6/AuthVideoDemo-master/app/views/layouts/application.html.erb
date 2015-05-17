@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AuthDemo</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+
+  <nav>
+    <ul class="nav nav-pills">
+      <div class="navbar-header">
+        <li><a href="<%= new_user_url %>">New User</a></li>
+        <% if current_user %>
+          <li><a href="<%= new_session_url %>">Log In</a></li>
+
+        <% else %>
+          <li><a href="<%= session_url %>", method: :delete>Log Out</a></li>
+        <% end %>
+      </div>
+    </ul>
+
+  </nav>
+</head>
+<body>
+
+<div class="container"><%= yield %></div>
+
+</body>
+</html>
