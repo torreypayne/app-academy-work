@@ -10,6 +10,9 @@
     <ul class="nav nav-pills">
       <div class="navbar-header">
         <li><a href="<%= new_user_url %>">New User</a></li>
+        <li><%= link_to "Home", user_url %></li>
+        <li><%= link_to "Contact", user_url %></li>
+        <li><%= link_to "About", user_url %></li>
         <% if current_user %>
           <li><a href="<%= new_session_url %>">Log In</a></li>
 
