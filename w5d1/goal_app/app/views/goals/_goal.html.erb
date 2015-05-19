@@ -1,0 +1,7 @@
+
+<% if goal.visibility == "Public" || goal.author == current_user %>
+<p><%= goal.title %></p>
+<p><%= goal.author.username %></p>
+<p><%= goal.status + " " %>
+<%= link_to "Update Goal!", edit_goal_url(goal) %> </p>
+<% end %>

@@ -1,17 +1,4 @@
 Rails.application.routes.draw do
-  get 'goals/new'
-
-  get 'goals/create'
-
-  get 'goals/destroy'
-
-  get 'goals/edit'
-
-  get 'goals/update'
-
-  get 'goals/index'
-
-  get 'goals/show'
 
 resources :users, only: [:new, :create, :show]
 resource :session, only: [:create, :new, :destroy]
