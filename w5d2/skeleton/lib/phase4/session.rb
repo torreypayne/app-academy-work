@@ -1,7 +1,6 @@
 require 'json'
 require 'webrick'
 # require 'byebug'
-require_relative '../../bin/p03_template_server.rb'
 
 module Phase4
   class Session

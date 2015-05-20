@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'webrick'
+require 'byebug'
 require_relative '../lib/phase5/controller_base'
 
 # http://www.ruby-doc.org/stdlib-2.0/libdoc/webrick/rdoc/WEBrick.html
@@ -49,6 +50,7 @@ class CatsController < Phase5::ControllerBase
 
   def new
     @cat = Cat.new
+
     render :new
   end
 end

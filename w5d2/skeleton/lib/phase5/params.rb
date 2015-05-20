@@ -1,5 +1,7 @@
 require 'uri'
 
+
+
 module Phase5
   class Params
     # use your initialize to merge params from
@@ -11,10 +13,12 @@ module Phase5
     # passed in as a hash to `Params.new` as below:
     def initialize(req, route_params = {})
       @params = route_params
+      parse_www_encoded_form(req.query_string) if req.query_string
+      parse_www_encoded_form(req.body) if req.body
     end
 
     def [](key)
-      @params[key]
+      @params[key.to_s]
     end
 
     def to_s
@@ -30,20 +34,36 @@ module Phase5
     # should return
     # { "user" => { "address" => { "street" => "main", "zip" => "89436" } } }
     def parse_www_encoded_form(www_encoded_form)
-      URI::decode_www_form(www_encoded_form).each do |key, value|
-        @params[key] = value
+      hashes = www_encoded_form.split('&')
+      data = hashes.map { |hash| parse_key(hash) }
+      current = @params
+      data.each do |array|
+        val = array.pop
+        last_key = array.last
+        current = @params
+        array.each_with_index do |key, idx|
+          unless key == last_key
+            current[key] = {} unless current.has_key?(key)
+            current = current[key]
+          else
+            current[key] = val
+            break
+          end
+        end
       end
+
+      @params
     end
 
     # this should return an array
     # user[address][street] should return ['user', 'address', 'street']
     def parse_key(key)
-      new_key = key.scan(/\]\[|\[|\]/)
-      unless new_key == key
-        new_key.map { |el| parse_key(el) }
-      end
+      new_key = key.split(/\]\[|\[|\]|\=/).reject { |str| str.empty? }
+      # unless new_key == key
+      #   new_key.map { |el| parse_key(el) }
+      # end
 
-      new_key
+      # new_key
     end
   end
 end

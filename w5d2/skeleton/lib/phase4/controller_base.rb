@@ -8,7 +8,7 @@ module Phase4
         @session["Location"] = url
         @session["Status"] = 302
         @already_built_response = true
-        @session.store_session(@res)
+        session.store_session(@res)
       else
         raise Exception.new "Rendered twice!"
       end
@@ -26,11 +26,8 @@ module Phase4
 
     def render_content(content, content_type)
       if !@already_built_response
-        @session["Content Type"] = content_type
-        @session["Content Length"] = content.to_s.length
-        @session["Body"] = content
-        @already_built_response = true
-        @session.store_session(@res)
+        super
+        session.store_session(@res)
       else
         raise Exception.new "Rendered twice!"
       end
