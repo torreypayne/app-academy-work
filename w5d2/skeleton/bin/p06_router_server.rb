@@ -1,3 +1,4 @@
+require "byebug"
 require 'webrick'
 require_relative '../lib/phase6/controller_base'
 require_relative '../lib/phase6/router'

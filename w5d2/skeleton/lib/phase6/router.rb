@@ -1,9 +1,11 @@
+
 module Phase6
   class Route
     attr_reader :pattern, :http_method, :controller_class, :action_name
 
     def initialize(pattern, http_method, controller_class, action_name)
-      @pattern, @http_method, @controller_class, @action_name = pattern, http_method, controller_class, action_name
+      @pattern, @http_method, @controller_class, @action_name = pattern,
+        http_method, controller_class, action_name
     end
 
     # checks if pattern matches path and method matches request method
@@ -12,13 +14,15 @@ module Phase6
       # p req.path
       # p @http_method
       # p req.request_method.downcase
-      @pattern =~ req.path && @http_method == req.request_method.downcase
+      @pattern =~ req.path && @http_method == req.request_method.downcase.to_sym
     end
 
     # use pattern to pull out route params (save for later?)
     # instantiate controller and call controller action
     def run(req, res)
-      controller_class.new(req, res, {}).invoke_action(action_name)
+      regexp = Regexp.new(@pattern)
+      route_params = regexp.match(req.path) || {}
+      controller_class.new(req, res, route_params).invoke_action(action_name)
     end
   end
 
@@ -37,6 +41,7 @@ module Phase6
     # evaluate the proc in the context of the instance
     # for syntactic sugar :)
     def draw(&proc)
+      self.instance_eval(&proc)
     end
 
     # make each of these methods that
@@ -49,7 +54,7 @@ module Phase6
 
     # should return the route that matches this request
     def match(req)
-      routes.each do |route|
+      @routes.each do |route|
         if route.matches?(req)
           return route
         end
