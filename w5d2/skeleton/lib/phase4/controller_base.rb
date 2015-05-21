@@ -9,6 +9,7 @@ module Phase4
         @session["Status"] = 302
         @already_built_response = true
         session.store_session(@res)
+        flash.store_session(@res)
       else
         raise Exception.new "Rendered twice!"
       end
@@ -36,6 +37,10 @@ module Phase4
     # method exposing a `Session` object
     def session
       @session ||= Session.new(@req)
+    end
+
+    def flash
+      @flash ||= Flash.new(@req)
     end
   end
 end
