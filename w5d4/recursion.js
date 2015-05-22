@@ -70,4 +70,65 @@ var makeChange = function (coins, target) {
   }
 };
 
-console.log(makeChange([10, 7, 1], 14));
+var merge = function (arr1, arr2) {
+  var result = [];
+  while (arr1.length > 0) {
+    if (arr1[0] < arr2[0] || arr2.length === 0) {
+      result.push(arr1.shift());
+    } else {
+      result.push(arr2.shift());
+    }
+
+  }
+
+  while (arr2.length > 0) {
+    result.push(arr2.shift());
+  }
+  return result;
+};
+
+var mergeSort = function (array) {
+  if (array.length < 2) {
+    return array;
+  }
+  else {
+    return merge(mergeSort(array.slice(0,array.length / 2)), mergeSort(array.slice(array.length/2, array.length)));
+  }
+};
+
+var myUniq = function (array) {
+  var newArray = [];
+  for (var i = 0; i < array.length; i++) {
+    if (newArray.indexOf(array[i]) === -1) {
+      newArray.push(array[i]);
+    }
+  }
+  return newArray;
+};
+
+var myEach = function (array, funct) {
+  for (var i = 0; i < array.length; i++) {
+    funct(array[i]);
+  }
+  return array;
+};
+
+var subsets = function (array) {
+  if (array.length === 0) {
+    return [[]];
+  }
+  else {
+    var result = [array];
+    for (var i = 0; i < array.length; i++) {
+      var newArray = array;
+      newArray.splice(i,1);
+      result.concat(subsets(newArray));
+    }
+  }
+
+  return result;
+};
+
+// console.log(makeChange([10, 7, 1], 14));
+// console.log(mergeSort([5,4,3,2,1]));
+console.log(subsets([1,2,3]));
