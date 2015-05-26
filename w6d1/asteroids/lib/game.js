@@ -9,6 +9,7 @@
     this.NUM_ASTEROIDS = 10;
     this.asteroids = [];
     this.addAsteroids();
+    this.ship = new Asteroids.Ship(this);
   };
 
   Game.prototype.randomPosition = function() {
@@ -25,29 +26,58 @@
 
   Game.prototype.draw = function(ctx) {
     ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
-    this.asteroids.forEach(function(asteroid) {
+    this.allObjects().forEach(function(asteroid) {
       asteroid.draw(ctx);
     });
   };
 
   Game.prototype.moveObjects = function() {
-    this.asteroids.forEach(function(asteroid) {
+    this.allObjects().forEach(function(asteroid) {
       asteroid.move();
     });
   };
 
   Game.prototype.wrap = function(pos, callback) {
-    if (pos[0] === this.DIM_X) {
-      var m = pos[1] / pos[0];
-      var b = pos[1] - m*pos[0];
+    if (pos[0] >= this.DIM_X) {
+      // var m = pos[1] / pos[0];
+      // var b = pos[1] - m*pos[0];
       pos[0] = 0;
-      pos[1] = b;
-    } else if (pos[0] === 0) {
-      var m = pos[1] / pos[0];
-      var b = pos[1] - m*pos[0];
-      pos[0] = this.DIM_X;
-      pos[1] = b;
+      // pos[1] = b;
     }
-    callback();
+    else if (pos[0] <= 0) {
+      // var m = pos[1] / pos[0];
+      // var b = pos[1] - m*pos[0];
+      pos[0] = this.DIM_X;
+      // pos[1] = b;
+    }
+    else if (pos[1] >= this.DIM_Y) {
+        pos[1] = 0;
+    }
+    else if (pos[1] <= 0){
+      pos[1] = this.DIM_Y;
+    }
+    return pos;
+  };
+
+  Game.prototype.checkCollisions = function() {
+    for(var i = 0; i < this.allObjects().length; i++) {
+      for(var j = i+1; j < this.allObjects().length; j++) {
+        this.allObjects()[i].collidedWith(this.allObjects()[j]);
+      }
+    }
+  };
+
+  Game.prototype.step = function() {
+    this.moveObjects();
+    this.checkCollisions();
+  };
+
+  Game.prototype.remove = function(asteroid) {
+    var removeIndex = this.asteroids.indexOf(asteroid);
+    this.asteroids.splice(removeIndex,1);
+  };
+
+  Game.prototype.allObjects = function() {
+    return this.asteroids.concat([this.ship]);
   };
 })();

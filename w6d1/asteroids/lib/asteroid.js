@@ -9,4 +9,11 @@
     this.vel = [2*Math.random()-1, 2*Math.random()-1];
   };
   Asteroids.Util.inherits(Asteroids.Asteroid, Asteroids.MovingObject);
+
+  Asteroid.prototype.collidedWith = function(otherObject) {
+    if (this.isCollidedWith(otherObject) && otherObject === this.game.ship) {
+      otherObject.relocate();
+      this.game.remove(this);
+    }
+  };
 })();
