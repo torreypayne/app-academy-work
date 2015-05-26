@@ -75,10 +75,12 @@
 
   Game.prototype.remove = function(asteroid) {
     var removeIndex = this.asteroids.indexOf(asteroid);
-    this.asteroids.splice(removeIndex,1);
+    this.asteroids.splice(removeIndex, 1);
   };
 
   Game.prototype.allObjects = function() {
-    return this.asteroids.concat([this.ship]).concat(this.bullets);
+    console.log(this.bullets);
+    var all = this.asteroids.concat([this.ship]).concat(this.bullets);
+    return all;
   };
 })();

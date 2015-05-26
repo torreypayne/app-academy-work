@@ -27,9 +27,6 @@
   };
 
   MovingObject.prototype.move = function() {
-    // if (atEndOfCanvas) {
-    //
-    // }
     this.pos = this.game.wrap(this.pos);
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
@@ -45,10 +42,10 @@
     return false;
   };
 
-  MovingObject.prototype.collidedWith = function(otherObject) {
-    if (this.isCollidedWith(otherObject)) {
-      this.game.remove(otherObject);
-      this.game.remove(this);
-    }
-  };
+  // MovingObject.prototype.collidedWith = function(otherObject) {
+  //   if (this.isCollidedWith(otherObject)) {
+  //     this.game.remove(otherObject);
+  //     this.game.remove(this);
+  //   }
+  // };
 })();
