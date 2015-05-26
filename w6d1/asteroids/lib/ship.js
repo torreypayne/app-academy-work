@@ -23,4 +23,10 @@
     this.vel[1] += impulse[1];
   };
 
+  Ship.prototype.fireBullet = function() {
+    var that = this;
+    var bullet = new Asteroids.Bullet(that, that.vel);
+    this.game.bullets.push(bullet);
+  };
+
 })();

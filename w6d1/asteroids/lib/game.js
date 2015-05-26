@@ -10,6 +10,7 @@
     this.asteroids = [];
     this.addAsteroids();
     this.ship = new Asteroids.Ship(this);
+    this.bullets = [];
   };
 
   Game.prototype.randomPosition = function() {
@@ -78,6 +79,6 @@
   };
 
   Game.prototype.allObjects = function() {
-    return this.asteroids.concat([this.ship]);
+    return this.asteroids.concat([this.ship]).concat(this.bullets);
   };
 })();

@@ -14,6 +14,9 @@
     if (this.isCollidedWith(otherObject) && otherObject === this.game.ship) {
       otherObject.relocate();
       this.game.remove(this);
+    } else if (this.isCollidedWith(otherObject) && this.game.bullets.indexOf(otherObject) !== -1) {
+      this.game.remove(this);
+      this.game.bullets.splice(this.game.bullets.indexOf(otherObject), 1);
     }
   };
 })();
